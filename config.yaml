@@ -1,0 +1,5 @@
+google_pub_sub:
+  project_id: "hungry-falconry"
+  topic_id: "hf-device-topic"
+  subscription:
+    type:  "schedule-consumer"

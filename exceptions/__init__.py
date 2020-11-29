@@ -1,0 +1,2 @@
+class MACAddressNoConfigured(Exception):
+    pass
