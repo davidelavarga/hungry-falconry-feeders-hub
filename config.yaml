@@ -5,3 +5,9 @@ google_pub_sub:
     type: "schedule-consumer"
     message_retention_duration: 86400  # seconds
     ack_deadline_seconds: 300
+
+schedule_store:
+  main_path: "/schedules"
+  todo_path: "todo"            # main_path/todo_path
+  pending_path: "pending"      # main_path/pending_path
+  done_path: "done"            # main_path/done_path
