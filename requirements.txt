@@ -1,1 +1,2 @@
 get-mac==0.8.2
+google-cloud-pubsub==2.2.0

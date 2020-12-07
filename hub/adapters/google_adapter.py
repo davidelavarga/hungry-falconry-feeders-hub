@@ -1,4 +1,8 @@
+import logging
 import os
+
+from google.api_core.exceptions import AlreadyExists
+from google.protobuf.duration_pb2 import Duration
 
 from hub.domain.ports import FeederCommunicationPort
 from google.cloud import pubsub_v1  # TODO Use Pub/Sub Lite instead Pub/Sub
@@ -16,7 +20,7 @@ class GooglePubSubAdapter(FeederCommunicationPort):
 
     def __init__(self):
         self.subscriber = pubsub_v1.SubscriberClient()
-        self.subscription_path = self.subscriber.subscription_path("PROJECT_ID", "SUBSCRIPTION_ID")
+        self.subscription_path = get_or_create_subscription()
 
     @staticmethod
     def callback(message):
@@ -37,16 +41,36 @@ class GooglePubSubAdapter(FeederCommunicationPort):
 
 
 def get_or_create_subscription():
-    # TODO test this
-    subscriber = pubsub_v1.SubscriberClient()
-    conf = get_config("config.yaml")["google_pub_sub"]
+    conf = get_config()["google_pub_sub"]
     project_id, topic_id = conf["project_id"], conf["topic_id"]
     subscription_id = get_subs_name(conf["subscription"].get("type", "schedule-consumer"))
+
+    subscriber = pubsub_v1.SubscriberClient()
+    publisher = pubsub_v1.PublisherClient()
+
     sub_path = subscriber.subscription_path(project_id, subscription_id)
-    topic_path = subscriber.topic_path(project_id, topic_id)
-    subscriber.create_subscription(request={"name": sub_path, "topic": topic_path})
+    topic_path = publisher.topic_path(project_id, topic_id)
+
+    try:
+        subscriber.create_subscription(request={
+            "name": sub_path,
+            "topic": topic_path,
+            "message_retention_duration": Duration(seconds=get_config().get("message_retention_duration", 7126560)),
+            "ack_deadline_seconds": get_config().get("ack_deadline_seconds", 300),
+            "filter": f'attributes.mac = "{get_mac()}"'
+        })
+        logging.info(f"{sub_path} created")
+    except AlreadyExists:
+        logging.info(f"{sub_path} already exists")
+        return sub_path
+
+    return sub_path
 
 
 def get_subs_name(subs_type: str):
     mac = get_mac()
     return f"{mac}-{subs_type}"
+
+
+sub = get_or_create_subscription()
+print(sub)

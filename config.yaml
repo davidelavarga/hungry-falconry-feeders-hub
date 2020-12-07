@@ -2,4 +2,6 @@ google_pub_sub:
   project_id: "hungry-falconry"
   topic_id: "hf-device-topic"
   subscription:
-    type:  "schedule-consumer"
+    type: "schedule-consumer"
+    message_retention_duration: 86400  # seconds
+    ack_deadline_seconds: 300
