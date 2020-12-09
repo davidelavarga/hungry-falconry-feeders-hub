@@ -1,5 +1,4 @@
 import logging
-import threading
 import time
 
 from hexagonal_settings import get_settings
@@ -14,15 +13,13 @@ def main():
     scheduler = ScheduleBuilder()
     scheduler.initialize_scheduler()
 
-    t = threading.Thread(target=get_settings().backend(scheduler, serve_job).receive_schedules)
-
     try:
         logging.info("Scheduler start")
         # This already create a thread
         scheduler.start()
 
         logging.info("Receive schedules start")
-        t.start()
+        get_settings().backend(scheduler, serve_job).receive_schedules()
         while True:
             time.sleep(2)
     except (KeyboardInterrupt, SystemExit):
