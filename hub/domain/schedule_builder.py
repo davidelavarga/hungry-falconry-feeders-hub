@@ -25,8 +25,7 @@ class ScheduleBuilder(object):
     def initialize_scheduler(self):
         self.scheduler = BackgroundScheduler(jobstores=self.jobstores,
                                              executors=self.executors,
-                                             job_defaults=self.job_defaults,
-                                             timezone=utc)
+                                             job_defaults=self.job_defaults)
 
     def feeder_schedule_as_job(self, data: dict, job: Callable):
         schedule_id = str(data["id"])
