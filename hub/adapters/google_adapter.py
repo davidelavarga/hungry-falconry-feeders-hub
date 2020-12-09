@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Callable
 
 from google.api_core.exceptions import AlreadyExists
 from google.protobuf.duration_pb2 import Duration
@@ -14,22 +15,23 @@ from utils.mac import get_mac
 
 class GoogleSubAdapter(BackendPort):
 
-    def __init__(self, job_scheduler: ScheduleBuilder):
+    def __init__(self, job_scheduler: ScheduleBuilder, serve_job: Callable):
         self.subscriber = pubsub_v1.SubscriberClient()
         self.subscription_path = get_or_create_subscription()
         self.job_scheduler = job_scheduler
+        self.serve_job = serve_job
 
     def __callback(self, message):
         logging.info(f"Received message: {message}")
-        self.job_scheduler.feeder_schedule_as_job(json.loads(message.data))
+        self.job_scheduler.feeder_schedule_as_job(json.loads(message.data), self.serve_job)
         message.ack()
 
     def receive_schedules(self):
         streaming_pull_future = self.subscriber.subscribe(self.subscription_path, callback=self.__callback)
         # Wrap subscriber in a 'with' block to automatically call close() when done.
+        logging.info(f"Getting msgs from {self.subscription_path} ...")
         with self.subscriber:
             try:
-                logging.info(f"Getting msgs from {self.subscription_path} ...")
                 return streaming_pull_future.result()
             except TimeoutError:
                 streaming_pull_future.cancel()
@@ -50,8 +52,9 @@ def get_or_create_subscription():
         subscriber.create_subscription(request={
             "name": sub_path,
             "topic": topic_path,
-            "message_retention_duration": Duration(seconds=get_config().get("message_retention_duration", 7126560)),
-            "ack_deadline_seconds": get_config().get("ack_deadline_seconds", 300),
+            "message_retention_duration": Duration(
+                seconds=conf["subscription"].get("message_retention_duration", 86400)),
+            "ack_deadline_seconds": conf["subscription"].get("ack_deadline_seconds", 300),
             "filter": f'attributes.mac = "{get_mac()}"'
         })
         logging.info(f"{sub_path} created")

@@ -9,4 +9,5 @@ class LoraFeederJob(FeederJobPort):
         self.url = ""
 
     def serve_portion(self, feeder_id: int):
-        requests.post(self.url, data=feeder_id)
+        print(f"Port to {feeder_id}")
+        # requests.post(self.url, data=feeder_id)
