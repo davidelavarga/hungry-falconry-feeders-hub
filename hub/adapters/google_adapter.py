@@ -67,4 +67,4 @@ def get_or_create_subscription():
 
 def get_subs_name(subs_type: str):
     mac = get_mac()
-    return f"{mac}-{subs_type}"
+    return f"{subs_type}-{mac}"
