@@ -23,7 +23,7 @@ class GoogleSubAdapter(BackendPort):
 
     def __callback(self, message):
         logging.info(f"Received message: {message}")
-        self.job_scheduler.feeder_schedule_as_job(json.loads(message.data), self.serve_job)
+        self.job_scheduler.manage_action(json.loads(message.data), message.attributes["action"], self.serve_job)
         message.ack()
 
     def receive_schedules(self):

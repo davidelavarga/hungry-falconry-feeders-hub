@@ -7,7 +7,6 @@ COPY . /app
 WORKDIR /app
 ENV CONFIG_PATH=config.yaml
 ENV SETTINGS=Default
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/hungry-falconry-pubsub-secrets.json
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 

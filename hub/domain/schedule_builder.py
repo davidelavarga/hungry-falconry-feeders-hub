@@ -1,33 +1,37 @@
+import logging
 from datetime import datetime
 from typing import Callable
 
-from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
+from apscheduler.executors.pool import ProcessPoolExecutor
+from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
-from pytz import utc
+
+from utils.get_config import get_config
 
 
 class ScheduleBuilder(object):
 
     def __init__(self):
         self.jobstores = {
-            # 'redis': RedisJobStore()
+            'default': RedisJobStore(),
+            'redis': RedisJobStore()
         }
         self.executors = {
-            'default': ThreadPoolExecutor(max_workers=20),
-            'processpool': ProcessPoolExecutor(max_workers=5)
+            'default': ProcessPoolExecutor(max_workers=get_config()["scheduler"].get("process_pool_max_workers", 20))
         }
         self.job_defaults = {
-            'coalesce': False,
-            'max_instances': 3  # TODO max portions????
+            'coalesce': True,
+            'max_instances': 1
         }
-        self.scheduler = None
-
-    def initialize_scheduler(self):
         self.scheduler = BackgroundScheduler(jobstores=self.jobstores,
                                              executors=self.executors,
                                              job_defaults=self.job_defaults)
 
-    def feeder_schedule_as_job(self, data: dict, job: Callable):
+    def manage_action(self, data: dict, action: str, job: Callable):
+        params = (data, job)
+        getattr(self, action)(*params)
+
+    def add(self, data, job):
         schedule_id = str(data["id"])
         schedule_date = data["timestamp"]
         feeder_id = data["feeder"]
@@ -36,10 +40,18 @@ class ScheduleBuilder(object):
         self.scheduler.add_job(job, "date", run_date=run_date, id=schedule_id, args=[feeder_id],
                                replace_existing=True)
 
+    def remove(self, data, job):
+        try:
+            schedule_id = str(data["id"])
+            self.scheduler.remove_job(schedule_id)
+        except Exception:
+            logging.exception(f"Schedule does not exist. Data: {data}")
+
     def start(self):
         return self.scheduler.start()
 
     def shutdown(self):
         return self.scheduler.shutdown()
 
-# data = {"id": 22, "timestamp": "2020-12-15T11:28:00Z", "done": True, "feeder": 1}
+# data = {"id": 22, "action": "add", "timestamp": "2020-12-15T11:28:00Z", "done": True, "feeder": 1}
+# data = {"id": 22, "action": "remove", "timestamp": "2020-12-15T11:28:00Z", "done": True, "feeder": 1}

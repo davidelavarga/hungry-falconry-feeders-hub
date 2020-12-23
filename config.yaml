@@ -6,8 +6,5 @@ google_pub_sub:
     message_retention_duration: 86400  # seconds
     ack_deadline_seconds: 300
 
-schedule_store:
-  main_path: "/schedules"
-  todo_path: "todo"            # main_path/todo_path
-  pending_path: "pending"      # main_path/pending_path
-  done_path: "done"            # main_path/done_path
+scheduler:
+  process_pool_max_workers: 20

@@ -14,7 +14,6 @@ def serve_job(feeder_id: int):
 
 def main():
     scheduler = ScheduleBuilder()
-    scheduler.initialize_scheduler()
 
     try:
         logging.info("Scheduler start")
