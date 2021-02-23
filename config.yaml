@@ -6,6 +6,8 @@ google_pub_sub:
     message_retention_duration: 86400  # seconds
     ack_deadline_seconds: 300
 
+scheduler:
+  process_pool_max_workers: 20
 lora:
   frecuency: 868.1
   actions:

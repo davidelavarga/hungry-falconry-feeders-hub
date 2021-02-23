@@ -1,9 +1,11 @@
+import logging
 import os
+from functools import lru_cache
 
 import yaml
-import logging
 
 
+@lru_cache
 def get_config(path: str = ""):
     if not path:
         path = os.environ["CONFIG_PATH"]
