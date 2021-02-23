@@ -4,3 +4,7 @@ APScheduler==3.6.3
 pytz==2020.4
 requests==2.25.0
 PyYAML==5.3.1
+adafruit-blinka==6.2.2
+adafruit-circuitpython-framebuf==1.4.5
+adafruit-circuitpython-ssd1306==2.10.2
+adafruit-circuitpython-rfm9x==2.1.3

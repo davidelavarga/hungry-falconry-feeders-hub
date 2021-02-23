@@ -6,6 +6,11 @@ google_pub_sub:
     message_retention_duration: 86400  # seconds
     ack_deadline_seconds: 300
 
+lora:
+  frecuency: 868.1
+  actions:
+    - serve: "s"
+
 schedule_store:
   main_path: "/schedules"
   todo_path: "todo"            # main_path/todo_path
