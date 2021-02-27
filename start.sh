@@ -1,1 +1,3 @@
-python3 -Om hub
+#!/bin/sh
+docker run --rm -d -p 6379:6379 --name redis redis:alpine
+python3 -Om hub &
