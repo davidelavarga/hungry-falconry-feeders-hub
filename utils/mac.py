@@ -1,6 +1,6 @@
 from getmac import get_mac_address
 
-from exceptions import MACAddressNoConfigured
+from hub.exceptions import MACAddressNoConfigured
 
 
 def get_mac() -> str:

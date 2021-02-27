@@ -1,7 +1,7 @@
 import logging
 import time
 
-from hexagonal_settings import get_settings
+from hub.hexagonal_settings import get_settings
 from hub.domain.schedule_builder import ScheduleBuilder
 
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(name)s: %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
