@@ -5,7 +5,6 @@ from functools import lru_cache
 import yaml
 
 
-@lru_cache
 def get_config(path: str = ""):
     if not path:
         path = os.environ["CONFIG_PATH"]
