@@ -11,7 +11,7 @@ scheduler:
 lora:
   frecuency: 868.1
   actions:
-    - serve: "s"
+    serve: "s"
 
 schedule_store:
   main_path: "/schedules"
