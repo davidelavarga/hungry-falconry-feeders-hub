@@ -14,7 +14,7 @@ class ScheduleBuilder(object):
 
     def __init__(self):
         self.jobstores = {
-            'default': MemoryJobStore(),
+            'default': RedisJobStore(),
             'redis': RedisJobStore()
         }
         self.executors = {
