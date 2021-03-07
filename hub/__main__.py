@@ -1,5 +1,7 @@
 import logging
 import time
+import sys
+import os
 
 from hub.hexagonal_settings import get_settings
 from hub.domain.schedule_builder import ScheduleBuilder
@@ -11,9 +13,14 @@ logging.getLogger().setLevel(logging.INFO)
 def serve_job(feeder_id: int):
     get_settings().feeder_job().serve_portion(feeder_id)
 
+def config_environment():
+    os.environ["SETTINGS"] = sys.argv[1]
+    os.environ["CONFIG_PATH"] = sys.argv[2]
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = sys.argv[3]
 
 def main():
     scheduler = ScheduleBuilder()
+    config_environment()
 
     try:
         logging.info("Scheduler start")
