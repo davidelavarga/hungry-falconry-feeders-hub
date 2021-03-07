@@ -1,16 +1,15 @@
 import logging
 
-import adafruit_rfm9x
-import board
-import busio
-from digitalio import DigitalInOut
-
 from hub.domain.ports import FeederJobPort
 from utils.get_config import get_config
 
 
 class LoraFeederJob(FeederJobPort):
     def __init__(self):
+        import adafruit_rfm9x
+        import board
+        import busio
+        from digitalio import DigitalInOut
         cs = DigitalInOut(board.CE1)
         reset = DigitalInOut(board.D25)
         spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)

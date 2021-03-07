@@ -2,7 +2,7 @@ from hub.domain.ports import FeederJobPort
 import RPi.GPIO as GPIO
 import time
 
-PIN = 4
+PIN = 21
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIN, GPIO.OUT)
