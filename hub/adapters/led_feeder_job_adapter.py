@@ -2,11 +2,13 @@ from hub.domain.ports import FeederJobPort
 import RPi.GPIO as GPIO
 import time
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(7, GPIO.OUT)
+PIN = 4
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIN, GPIO.OUT)
 
 class LedFeederJob(FeederJobPort):    
     def serve_portion(self, feeder_id: int):
-        GPIO.output(7, True)
+        GPIO.output(PIN, True)
         time.sleep(1)
-        GPIO.output(7, False)
+        GPIO.output(PIN, False)
