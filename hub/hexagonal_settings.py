@@ -1,3 +1,4 @@
+from hub.adapters.led_feeder_job_adapter import LedFeederJob
 import os
 import sys
 
@@ -14,6 +15,10 @@ class Settings(object):
 class GoogleSettings(Settings):
     backend = GoogleSubAdapter
     feeder_job = LoraFeederJob
+
+class LedSettings(Settings):
+    backend = GoogleSubAdapter
+    feeder_job = LedFeederJob
 
 
 class DefaultSettings(Settings):
