@@ -1,0 +1,20 @@
+# Copy this file to /etc/systemd/system/python.hub.service
+# sudo systemctl enable python.hub
+
+[Unit]
+Description= Feeder Hub
+After=multi-user.target
+Requires=docker.redis.service
+
+[Service]
+WorkingDirectory=/home/pi/hungry-falconry-feeders-hub/
+Environment="SETTINGS=Led"
+Environment="CONFIG_PATH=config.yaml"
+Environment="GOOGLE_APPLICATION_CREDENTIALS=/credentials/hungry-falconry-hub-creedentials.json"
+User=pi
+Type=idle
+Restart=always
+ExecStart=/usr/bin/python3 -m hub & > /dev/null
+
+[Install]
+WantedBy=multi-user.target

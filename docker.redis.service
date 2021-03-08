@@ -1,0 +1,17 @@
+# Copy this file to /etc/systemd/system/python.hub.service
+# sudo systemctl enable python.hub
+
+[Unit]
+Description=Redis Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop redis-hub
+ExecStartPre=-/usr/bin/docker rm redis-hub
+ExecStart=/usr/bin/docker run --rm -p 6379:6379 -v /redis:/data --name redis-hub redis
+
+[Install]
+WantedBy=multi-user.target
