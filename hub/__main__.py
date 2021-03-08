@@ -6,10 +6,6 @@ import os
 from hub.hexagonal_settings import get_settings
 from hub.domain.schedule_builder import ScheduleBuilder
 
-os.environ["SETTINGS"] = sys.argv[1]
-os.environ["CONFIG_PATH"] = sys.argv[2]
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = sys.argv[3]
-
 logging.basicConfig(format='%(asctime)s [%(levelname)s] %(name)s: %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
 logging.getLogger().setLevel(logging.INFO)
 
