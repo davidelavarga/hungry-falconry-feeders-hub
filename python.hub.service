@@ -8,7 +8,7 @@ Requires=docker.redis.service
 
 [Service]
 WorkingDirectory=/home/pi/hungry-falconry-feeders-hub/
-Environment="SETTINGS=Led"
+Environment="SETTINGS=Default"
 Environment="CONFIG_PATH=config.yaml"
 Environment="GOOGLE_APPLICATION_CREDENTIALS=/credentials/hungry-falconry-hub-creedentials.json"
 User=pi
