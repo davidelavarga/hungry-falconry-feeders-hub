@@ -32,6 +32,7 @@ class LoraFeederJob(FeederJobPort):
             GPIO.output(self.success_led, True)
             self.rfm9x.send(bytes(f"{feeder_id} {self.serve_action}", "utf-8"))
             logging.info(f"Sent LoRa message successfully!")
+            time.sleep(2)
             GPIO.output(self.success_led, False)
 
         except Exception:
