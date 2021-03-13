@@ -24,7 +24,7 @@ class LoraFeederJob(FeederJobPort):
         self.success_led = 13
         self.fail_led = 26
         self.warn_led = 19
-        self.__setup_check_leds()
+        self.__setup_leds()
 
     def serve_portion(self, feeder_id: int):
         logging.info(f"Post to {feeder_id}")
@@ -40,23 +40,8 @@ class LoraFeederJob(FeederJobPort):
             time.sleep(2)
             GPIO.output(self.fail_led, False)
 
-    def __setup_check_leds(self):
+    def __setup_leds(self):
         # Setup
         GPIO.setup(self.success_led, GPIO.OUT)
         GPIO.setup(self.fail_led, GPIO.OUT)
         GPIO.setup(self.warn_led, GPIO.OUT)
-
-        # Off all
-        self.__set_leds_statues(False)
-
-        # On all
-        self.__set_leds_statues(True)
-        time.sleep(2)
-
-        # Off all
-        self.__set_leds_statues(False)
-    
-    def __set_leds_statues(self, status: bool):
-        GPIO.output(self.success_led, status)
-        GPIO.output(self.fail_led, status)
-        GPIO.output(self.warn_led, status)
