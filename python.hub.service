@@ -1,5 +1,6 @@
 # Copy this file to /etc/systemd/system/python.hub.service
 # sudo systemctl enable python.hub
+# For any update: systemctl restart python.hub
 
 [Unit]
 Description= Feeder Hub
